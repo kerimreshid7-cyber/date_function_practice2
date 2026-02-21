@@ -16,7 +16,7 @@ CREATE TABLE orders_manual (
     shipped_date TIMESTAMP
 );
 
-
+-- lets create other tables to practice in many ways 
 
 CREATE TABLE customers (
     customer_id SERIAL PRIMARY KEY,
