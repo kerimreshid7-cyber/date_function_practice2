@@ -9,7 +9,7 @@ CREATE TABLE orders_manual (
     payment_method TEXT,
     product_name TEXT,
     category TEXT,
-    price NUMERIC(10,2),
+    amount NUMERIC(10,2),
     quantity INT,
     discount NUMERIC(10,2),
     order_date TIMESTAMP,
