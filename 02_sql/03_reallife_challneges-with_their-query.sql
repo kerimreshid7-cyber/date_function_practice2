@@ -1,58 +1,39 @@
-/*🔹 Challenge 1 — Orders Per Month
-
+/* Challenge 1 — Orders Per Month
 Business Question:
-How many orders did we receive each month?
-*/
-
- 
+How many orders did we receive each month?*/
  select date_trunc('month',order_date) as month ,count (*) 
  from orders group by date_trunc('month',order_date) order by month; 
 
     /*This query helps us to show total orders per month using grouping.  
     1 date_trunc is used to cut the month to start the first date of that month for example
-     if the orer date is jan 16 then it will turn to jan 1 then up to the final date registered in that month.
-*/
+     if the orer date is jan 16 then it will turn to jan 1 then up to the final date registered in that month.*/
 
 
-
-
-/*🔹 Challenge 2 — Monthly Revenue
+/*Challenge 2 — Monthly Revenue
 Calculate:
 (price × quantity) - discount
-Grouped by month.
-*/
-
+Grouped by month.*/
 select month,total_revenue from (select  date_trunc('month',order_date)as month ,
  sum(amount*quantity- coalesce(discount,0))as total_revenue from orders_manual 
  group by  date_trunc('month',order_date) order by total_revenue desc) t;
        
 
 
-
-
-/*🔹 Challenge 3 — Orders Per Month  (its similar to challenge 1 but 
+/* Challenge 3 — Orders Per Month  (its similar to challenge 1 but 
 the differece is what if null values in order date )
-
 Business Question:
-How many orders did we receive each month?
-
-*/
-
+How many orders did we receive each month?*/
 select coalesce(date_trunc('month',order_date)::text,'pending')as month ,count(*)as total_order_permonth 
 from orders_manual group by month order by total_order_permonth desc; 
 
 /* the coalsce function will give another row called pending but if there is null values in order_datet t
-hen while we are using count(*) the null values will be counted and display in pending  row.
-    
-*/
+hen while we are using count(*) the null values will be counted and display in pending  row.*/
 
 
-/*🔹 Challenge 4— Management asks:
+
+/* Challenge 4— Management asks:
 How many orders do we receive each month?
-They want to understand seasonality.
-*/
-
-
+They want to understand seasonality.*/
 select coalesce(date_trunc('month',order_date):: text,'pending') as month , count(*) as total_orders_per_month 
 from orders_manual   group by month order by total_orders_per_month desc;
 
@@ -61,27 +42,21 @@ from orders_manual   group by month order by total_orders_per_month desc;
 
 
 
-/*🔹 ✅ Challenge 5 — Monthly Revenue Trend (Trend Analysis)
+/*Challenge 5 — Monthly Revenue Trend (Trend Analysis)
 Business Scenario
 Finance team asks:
 How is revenue changing month by month?
-They want to see growth or decline.
-*/
-
+They want to see growth or decline.*/
 select  date_trunc('month',order_date)as month,sum(amount*quantity -coalesce(discount,0) ) as revenue_per_month from orders_manual 
 group by month order by month;
 
 
 
-
-/*🔹 ✅ Challenge 6 — Delivery Time Analysis (Date Functions + Business Logic)
+/*Challenge 6 — Delivery Time Analysis (Date Functions + Business Logic)
 Business Scenario
 Operations manager asks:
 What is the average delivery time in days per month?
-Delivery time = shipped_date − order_date
-*/
-
-
+Delivery time = shipped_date − order_date*/
 select date_trunc('month',order_date) as month ,avg(extract(epoch from(shipped_date-order_date))/86400)as average_delivery_time 
 from orders_manual where order_date is not null and shipped_date is not null   group by month order by month;
 
@@ -89,11 +64,11 @@ from orders_manual where order_date is not null and shipped_date is not null   g
     these functions doing avg= it will calculate average value of inside value  extract will use again inside the parentesis then divide by 86400
        epoch will change the value in to seconds      shipped_date-order_date) is business logic */
 
-/*✅ Challenge 7 — Month-to-Month Growth Using LAG
+
+/* Challenge 7 — Month-to-Month Growth Using LAG
 Business Scenario
 CEO asks:
 Compared to last month, did we grow or decline? */
-
 WITH monthly_revenue AS (
     SELECT  date_trunc('month', order_date) AS month, SUM(price * quantity - COALESCE(discount,0)) AS revenue
     FROM orders_manual WHERE order_date IS NOT NULL  GROUP BY month  ORDER BY month
@@ -106,7 +81,7 @@ SELECT  month, revenue,LAG(revenue) OVER (ORDER BY month) AS previous_month_reve
 
 
 
-/*✅ Challenge 8 — 🔥 Complex Business Challenge (Merge Everything)
+/* Challenge 8 — Complex Business Challenge (Merge Everything)
 Business Scenario
 The company wants to identify future delivery risk
 They suspect:
@@ -116,7 +91,6 @@ Time trends
 Growth
 Previous data
 Future comparison */
-
 
 -- Lets do it step by step first   
 SELECT
