@@ -10,14 +10,11 @@ How many orders did we receive each month?*/
 
 
 /*Challenge 2 — Monthly Revenue
-Calculate:
-(price × quantity) - discount
-Grouped by month.*/
+Calculate: (price × quantity) - discount  then   Grouped by month.*/
 select month,total_revenue from (select  date_trunc('month',order_date)as month ,
  sum(amount*quantity- coalesce(discount,0))as total_revenue from orders_manual 
  group by  date_trunc('month',order_date) order by total_revenue desc) t;
        
-
 
 /* Challenge 3 — Orders Per Month  (its similar to challenge 1 but 
 the differece is what if null values in order date )
@@ -44,9 +41,7 @@ from orders_manual   group by month order by total_orders_per_month desc;
 
 /*Challenge 5 — Monthly Revenue Trend (Trend Analysis)
 Business Scenario
-Finance team asks:
-How is revenue changing month by month?
-They want to see growth or decline.*/
+Finance team asks: How is revenue changing month by month? They want to see growth or decline.*/
 select  date_trunc('month',order_date)as month,sum(amount*quantity -coalesce(discount,0) ) as revenue_per_month from orders_manual 
 group by month order by month;
 
@@ -84,13 +79,8 @@ SELECT  month, revenue,LAG(revenue) OVER (ORDER BY month) AS previous_month_reve
 /* Challenge 8 — Complex Business Challenge (Merge Everything)
 Business Scenario
 The company wants to identify future delivery risk
-They suspect:
-If current orders are growing fast compared to previous month, next month shipments may be delayed.
-So they want analysis combining:
-Time trends
-Growth
-Previous data
-Future comparison */
+They suspect: If current orders are growing fast compared to previous month, next month shipments may be delayed.
+So they want analysis combining:Time trends,Growth,Previous data and Future comparison */
 
 -- Lets do it step by step first   
 SELECT
