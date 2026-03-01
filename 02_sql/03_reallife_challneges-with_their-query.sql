@@ -73,10 +73,7 @@ SELECT  month, revenue,LAG(revenue) OVER (ORDER BY month) AS previous_month_reve
          WHEN revenue - LAG(revenue) OVER (ORDER BY month) < 0 THEN 'Decline' ELSE 'No Change'  END AS status FROM monthly_revenue;
 
 
-
-
-
-/* Challenge 8 — Complex Business Challenge (Merge Everything)
+ /* Challenge 8 — Complex Business Challenge (Merge Everything)
 Business Scenario
 The company wants to identify future delivery risk
 They suspect: If current orders are growing fast compared to previous month, next month shipments may be delayed.

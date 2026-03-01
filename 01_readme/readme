@@ -1,0 +1,109 @@
+README – Date Functions & Monthly Business Analysis Project
+ Project Title
+Monthly Business Analysis Using Date Functions in SQL
+
+   Project Objective
+This project focuses on analyzing business data using SQL date functions.
+The main goal is to understand:
+Monthly order volume
+Monthly revenue
+Revenue trends
+Month-to-month growth
+Delivery performance
+Risk detection based on growth patterns
+All analysis is done using date-based aggregation and business logic calculations.
+
+ Business Problms Solved
+   1 Orders Per Month
+We analyzed how many orders were received each month using:
+date_trunc('month', order_date)
+COUNT(*)
+GROUP BY
+This helps identify seasonality patterns and business activity levels.
+   2 Monthly Revenue Calculation
+Revenue formula used:
+(price × quantity) − discount
+Key concepts:
+SUM()
+COALESCE(discount, 0)
+Monthly grouping
+This allows the finance team to understand total income per month.
+   3 Handling NULL Dates
+Some records had missing order_date.
+Using:
+COALESCE(date_trunc(...), 'pending')
+We categorized missing dates as "pending" to maintain data transparency.
+This is important in BI because ignoring NULL values can distort results.
+   4 Revenue Trend Analysis
+We calculated revenue per month and sorted chronologically to observe:
+Growth
+Decline
+Stability
+This helps management understand business direction.
+   5 Delivery Time Analysis
+Business Logic:
+Delivery Time = shipped_date − order_date
+Steps:
+Subtract dates
+Convert interval to seconds using extract(epoch)
+Convert seconds to days (divide by 86400)
+Use AVG() to calculate monthly average delivery time
+This analysis supports operational efficiency monitoring.
+   6 Month-to-Month Growth Analysis
+Using advanced window functions:
+LAG() to get previous month revenue
+Revenue difference calculation
+CASE WHEN for growth/decline classification
+This provides direct insight into performance comparison.
+    7 Risk Detection Model (Advanced Challenge)
+We combined:
+CTE (WITH)
+Monthly aggregation
+LAG() and LEAD()
+Growth percentage formula
+ROUND()
+Risk classification logic
+Risk condition:
+If monthly growth > 20% → High Risk
+Else → Normal
+Business reasoning:
+Rapid growth may cause operational stress and delayed shipments.
+This challenge integrates time trends, historical comparison, and predictive thinking.
+
+    SQL Conepts Practiced
+date_trunc()
+Date subtraction
+extract(epoch)
+COUNT()
+SUM()
+AVG()
+GROUP BY
+ORDER By
+COALESCE
+CASE WHEN
+ROUND()
+LAG()
+LEAD()
+CTE (WITH)
+
+   Key Business Insights
+Identified peak and low sales months
+Measured revenue performance monthly
+Detected growth and decline patterns
+Measured operational delivery efficiency
+Built a simple risk detection model
+This project moves beyond basic queries and applies real business reasoning.
+
+    Learning Outcome
+From this project, I strengthened:
+Practical use of date functions in BI analysis
+Handling real-world data issues (NULL values)
+Writing structured analytical queries
+Using window functions for trend comparison
+Applying business logic inside SQL
+This project reflects intermediate-level Business Intelligence skills focused on time-based analysis.
+
+    Conclusion
+This project demonstrates how date functions are essential in Business Intelligence.
+Monthly analysis is a core requirement in real companies because most business reporting is time-based.
+By combining aggregation, window functions, and business logic, I was able to simulate real finance and operations reporting scenarios.
