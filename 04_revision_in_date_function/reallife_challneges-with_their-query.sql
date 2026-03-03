@@ -31,3 +31,38 @@ SELECT  month, revenue,LAG(revenue) OVER (ORDER BY month) AS previous_month_reve
     CASE WHEN revenue - LAG(revenue) OVER (ORDER BY month) > 0 THEN 'Growth'
          WHEN revenue - LAG(revenue) OVER (ORDER BY month) < 0 THEN 'Decline' ELSE 'No Change'  END AS status FROM monthly_revenue;
 
+
+-- Lets do it step by step first   
+SELECT
+    date_trunc('month', order_date) AS month,
+    COUNT(order_id) AS total_orders
+FROM orders_manual
+WHERE order_date IS NOT NULL
+GROUP BY month
+ORDER BY month;
+/* Here first i wrote to query to show total orders per month    
+then i will use it in the finall query in side with out order by bc we use it in aggregation functions'with' */
+
+
+
+ /* Challenge 12 — Complex Business Challenge (Merge Everything)
+Business Scenario
+The company wants to identify future delivery risk
+They suspect: If current orders are growing fast compared to previous month, next month shipments may be delayed.
+So they want analysis combining:Time trends,Growth,Previous data and Future comparison */
+
+--Here is the finall query and I will paste the above query in side CTEs(with)
+WITH monthly_orders AS (
+    SELECT date_trunc('month', order_date) AS month,
+        COUNT(order_id) AS total_orders FROM orders_manual WHERE order_date IS NOT NULL GROUP BY month )
+SELECT   month,total_orders,
+    LAG(total_orders) OVER (ORDER BY month) AS previous_month_orders,
+    LEAD(total_orders) OVER (ORDER BY month) AS next_month_orders,
+
+    ROUND(
+        (total_orders - LAG(total_orders) OVER (ORDER BY month))
+        * 100.0  / LAG(total_orders) OVER (ORDER BY month), 2) AS growth_percent,
+    CASE
+        WHEN (total_orders - LAG(total_orders) OVER (ORDER BY month))
+            * 100.0  / LAG(total_orders) OVER (ORDER BY month) > 20 THEN 'High Risk' ELSE 'Normal'
+    END AS risk_flag FROM monthly_orders ORDER BY month;
